@@ -66,9 +66,11 @@ nav a:hover {
 
 /* Logo image inside the header */
 .logo {
-  height: 50px;
-  width: auto;
+  height: 70px;
+  width: 70px;
   margin-right: 0.5rem;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 /* Hero section on the home page */
