@@ -212,21 +212,33 @@ function displayPetInfo(pet) {
   if (!infoEl) return;
   // Clear existing
   infoEl.innerHTML = '';
+  const card = document.createElement('div');
+  card.className = 'card';
+  const img = document.createElement('img');
+  if (pet.photos && pet.photos.length > 0) {
+    img.src = pet.photos[0].data;
+  } else {
+    img.src = 'images/real2.jpg';
+  }
+  img.alt = pet.name;
+  card.appendChild(img);
+  const cardContent = document.createElement('div');
+  cardContent.className = 'card-content';
   const heading = document.createElement('h3');
   heading.textContent = pet.name;
-  infoEl.appendChild(heading);
+  cardContent.appendChild(heading);
   const descP = document.createElement('p');
   descP.textContent = pet.description;
-  infoEl.appendChild(descP);
+  cardContent.appendChild(descP);
   const foodP = document.createElement('p');
   foodP.textContent = 'Aliment préféré : ' + (pet.food || '');
-  infoEl.appendChild(foodP);
+  cardContent.appendChild(foodP);
   const toyP = document.createElement('p');
   toyP.textContent = 'Jouet préféré : ' + (pet.toy || '');
-  infoEl.appendChild(toyP);
+  cardContent.appendChild(toyP);
   const behaviorP = document.createElement('p');
   behaviorP.textContent = 'Comportement : ' + (pet.behavior || '');
-  infoEl.appendChild(behaviorP);
+  cardContent.appendChild(behaviorP);
   // Vet file
   if (pet.vetFile) {
     const vetLink = document.createElement('a');
@@ -235,13 +247,15 @@ function displayPetInfo(pet) {
     vetLink.textContent = 'Télécharger le certificat vétérinaire';
     vetLink.style.display = 'block';
     vetLink.style.marginBottom = '0.5rem';
-    infoEl.appendChild(vetLink);
+    cardContent.appendChild(vetLink);
   }
-  // Photos
-  if (pet.photos && pet.photos.length > 0) {
+  card.appendChild(cardContent);
+  infoEl.appendChild(card);
+  // Additional photos beyond the first
+  if (pet.photos && pet.photos.length > 1) {
     const photosDiv = document.createElement('div');
     photosDiv.className = 'pet-photos';
-    pet.photos.forEach(ph => {
+    pet.photos.slice(1).forEach(ph => {
       const img = document.createElement('img');
       img.src = ph.data;
       img.alt = ph.name;
