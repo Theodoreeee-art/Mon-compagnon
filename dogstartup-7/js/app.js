@@ -114,6 +114,16 @@ function loadDashboard() {
   // Populate existing pet info if any
   if (user.pet) {
     displayPetInfo(user.pet);
+    const nameInput = document.getElementById('pet-name');
+    const descInput = document.getElementById('pet-desc');
+    const foodInput = document.getElementById('pet-food');
+    const toyInput = document.getElementById('pet-toy');
+    const behaviorInput = document.getElementById('pet-behavior');
+    if (nameInput) nameInput.value = user.pet.name || '';
+    if (descInput) descInput.value = user.pet.description || '';
+    if (foodInput) foodInput.value = user.pet.food || '';
+    if (toyInput) toyInput.value = user.pet.toy || '';
+    if (behaviorInput) behaviorInput.value = user.pet.behavior || '';
   }
   // Attach form handler
   const petForm = document.getElementById('pet-form');
@@ -133,12 +143,15 @@ function loadDashboard() {
 function savePetInfo(user) {
   const name = document.getElementById('pet-name').value.trim();
   const desc = document.getElementById('pet-desc').value.trim();
+  const food = document.getElementById('pet-food').value.trim();
+  const toy = document.getElementById('pet-toy').value.trim();
+  const behavior = document.getElementById('pet-behavior').value.trim();
   const vetFileInput = document.getElementById('pet-vet');
   const photoInput = document.getElementById('pet-photos');
   const errorEl = document.getElementById('pet-error');
   if (errorEl) errorEl.textContent = '';
-  if (!name || !desc) {
-    if (errorEl) errorEl.textContent = 'Veuillez indiquer le nom et la description du chien.';
+  if (!name || !desc || !food || !toy || !behavior) {
+    if (errorEl) errorEl.textContent = 'Veuillez remplir tous les champs concernant votre chien.';
     return;
   }
   // Read files asynchronously and then save
@@ -179,6 +192,9 @@ function savePetInfo(user) {
     const petObj = {
       name,
       description: desc,
+      food,
+      toy,
+      behavior,
       vetFile: vetObj,
       photos
     };
@@ -202,6 +218,15 @@ function displayPetInfo(pet) {
   const descP = document.createElement('p');
   descP.textContent = pet.description;
   infoEl.appendChild(descP);
+  const foodP = document.createElement('p');
+  foodP.textContent = 'Aliment préféré : ' + (pet.food || '');
+  infoEl.appendChild(foodP);
+  const toyP = document.createElement('p');
+  toyP.textContent = 'Jouet préféré : ' + (pet.toy || '');
+  infoEl.appendChild(toyP);
+  const behaviorP = document.createElement('p');
+  behaviorP.textContent = 'Comportement : ' + (pet.behavior || '');
+  infoEl.appendChild(behaviorP);
   // Vet file
   if (pet.vetFile) {
     const vetLink = document.createElement('a');
