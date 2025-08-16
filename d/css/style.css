@@ -67,10 +67,9 @@ body {
 }
 
 .search-button {
-  display: block;
-  margin: 0 auto 1rem;
+  display: inline-block;
+  margin: 0;
   padding: 0.7rem 1.2rem;
-  max-width: 200px;
   text-align: center;
   background-color: var(--primary-color);
   color: #fff;
@@ -81,6 +80,24 @@ body {
 
 .search-button:hover {
   background-color: var(--secondary-color);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.section-header .section-title {
+  text-align: left;
+  margin: 0;
+}
+
+.section-header .search-button {
+  margin: 0;
 }
 
 /* Thin rotating awareness messages at the very top */
