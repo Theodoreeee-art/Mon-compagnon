@@ -212,6 +212,7 @@ label {
 input[type="text"],
 input[type="email"],
 input[type="password"],
+input[type="date"],
 textarea,
 input[type="file"] {
   width: 100%;
@@ -241,6 +242,32 @@ button {
 
 button:hover {
   background-color: var(--secondary-color);
+}
+
+#pet-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 1rem;
+}
+
+#pet-form label {
+  align-self: center;
+  text-align: right;
+  padding-right: 0.5rem;
+}
+
+#pet-form h2 {
+  grid-column: 1 / -1;
+}
+
+#pet-form textarea,
+#pet-form input[type="file"],
+#pet-form button {
+  grid-column: 1 / -1;
+}
+
+#pet-form button {
+  justify-self: center;
 }
 
 .dashboard {

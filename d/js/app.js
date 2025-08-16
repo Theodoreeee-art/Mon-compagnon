@@ -116,11 +116,15 @@ function loadDashboard() {
     displayPetInfo(user.pet);
     initAlbum(user);
     const nameInput = document.getElementById('pet-name');
+    const breedInput = document.getElementById('pet-breed');
+    const dobInput = document.getElementById('pet-dob');
     const descInput = document.getElementById('pet-desc');
     const foodInput = document.getElementById('pet-food');
     const toyInput = document.getElementById('pet-toy');
     const behaviorInput = document.getElementById('pet-behavior');
     if (nameInput) nameInput.value = user.pet.name || '';
+    if (breedInput) breedInput.value = user.pet.breed || '';
+    if (dobInput) dobInput.value = user.pet.dob || '';
     if (descInput) descInput.value = user.pet.description || '';
     if (foodInput) foodInput.value = user.pet.food || '';
     if (toyInput) toyInput.value = user.pet.toy || '';
@@ -150,6 +154,8 @@ function loadDashboard() {
 // Save pet information from the dashboard form
 function savePetInfo(user) {
   const name = document.getElementById('pet-name').value.trim();
+  const breed = document.getElementById('pet-breed').value.trim();
+  const dob = document.getElementById('pet-dob').value;
   const desc = document.getElementById('pet-desc').value.trim();
   const food = document.getElementById('pet-food').value.trim();
   const toy = document.getElementById('pet-toy').value.trim();
@@ -158,7 +164,7 @@ function savePetInfo(user) {
   const photoInput = document.getElementById('pet-photos');
   const errorEl = document.getElementById('pet-error');
   if (errorEl) errorEl.textContent = '';
-  if (!name || !desc || !food || !toy || !behavior) {
+  if (!name || !breed || !dob || !desc || !food || !toy || !behavior) {
     if (errorEl) errorEl.textContent = 'Veuillez remplir tous les champs concernant votre chien.';
     return;
   }
@@ -199,6 +205,8 @@ function savePetInfo(user) {
     const idx = users.findIndex(u => u.email === user.email);
     const petObj = {
       name,
+      breed,
+      dob,
       description: desc,
       food,
       toy,
@@ -223,6 +231,8 @@ function showEditForm(pet) {
     form.style.display = 'block';
     if (pet) {
       document.getElementById('pet-name').value = pet.name || '';
+      document.getElementById('pet-breed').value = pet.breed || '';
+      document.getElementById('pet-dob').value = pet.dob || '';
       document.getElementById('pet-desc').value = pet.description || '';
       document.getElementById('pet-food').value = pet.food || '';
       document.getElementById('pet-toy').value = pet.toy || '';
@@ -258,6 +268,16 @@ function displayPetInfo(pet) {
   const heading = document.createElement('h3');
   heading.textContent = pet.name;
   cardContent.appendChild(heading);
+  const breedP = document.createElement('p');
+  breedP.textContent = 'Race : ' + (pet.breed || '');
+  cardContent.appendChild(breedP);
+  const dobP = document.createElement('p');
+  if (pet.dob) {
+    dobP.textContent = 'Date de naissance : ' + new Date(pet.dob).toLocaleDateString('fr-FR');
+  } else {
+    dobP.textContent = 'Date de naissance :';
+  }
+  cardContent.appendChild(dobP);
   const descP = document.createElement('p');
   descP.textContent = pet.description;
   cardContent.appendChild(descP);
