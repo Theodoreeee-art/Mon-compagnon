@@ -235,8 +235,11 @@ function displayPetInfo(pet) {
   infoEl.style.display = 'block';
   // Clear existing
   infoEl.innerHTML = '';
+  const title = document.createElement('h2');
+  title.textContent = "Fiche d'identité de votre animal";
+  infoEl.appendChild(title);
   const card = document.createElement('div');
-  card.className = 'card';
+  card.className = 'card pet-card';
   const img = document.createElement('img');
   if (pet.photos && pet.photos.length > 0) {
     img.src = pet.photos[0].data;
