@@ -197,7 +197,8 @@ function savePetInfo(user) {
       const p = new Promise((resolve) => {
         const fr = new FileReader();
         fr.onload = function() {
-          photos.push({ name: file.name, data: fr.result, comment: '' });
+          const comment = prompt('Ajouter un commentaire pour cette photo :', '');
+          photos.push({ name: file.name, data: fr.result, comment });
           resolve();
         };
         fr.readAsDataURL(file);
@@ -349,7 +350,8 @@ function initAlbum(user) {
     const tasks = files.map(file => new Promise(resolve => {
       const fr = new FileReader();
       fr.onload = () => {
-        newPhotos.push({ name: file.name, data: fr.result, comment: '' });
+        const comment = prompt('Ajouter un commentaire pour cette photo :', '');
+        newPhotos.push({ name: file.name, data: fr.result, comment });
         resolve();
       };
       fr.readAsDataURL(file);
