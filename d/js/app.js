@@ -355,7 +355,12 @@ function displayAlbum(pet) {
       const img = document.createElement('img');
       img.src = ph.data;
       img.alt = ph.name;
-      wrap.appendChild(img);
+      img.style.cursor = 'pointer';
+      const link = document.createElement('a');
+      link.href = ph.data;
+      link.target = '_blank';
+      link.appendChild(img);
+      wrap.appendChild(link);
       const ta = document.createElement('textarea');
       ta.className = 'album-comment';
       ta.placeholder = 'Ajouter un commentaire';
