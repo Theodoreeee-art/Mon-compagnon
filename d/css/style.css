@@ -23,7 +23,7 @@ body {
   line-height: 1.6;
 }
 
-/* Top donation banner */
+/* Donation banner displayed below the header */
 .donation-banner {
   background-color: var(--secondary-color);
   color: #fff;
