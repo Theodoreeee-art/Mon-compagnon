@@ -23,6 +23,14 @@ body {
   line-height: 1.6;
 }
 
+.search-box {
+  display: block;
+  margin: 0 auto 1rem;
+  padding: 0.5rem;
+  max-width: 300px;
+  width: 100%;
+}
+
 /* Thin rotating awareness messages at the very top */
 .awareness-banner {
   background-color: #ffe08a;
