@@ -419,10 +419,17 @@ function openAlbumModal(pet) {
   modalGallery.innerHTML = '';
   if (pet.photos) {
     pet.photos.forEach(ph => {
+      const wrap = document.createElement('div');
+      wrap.className = 'modal-item';
       const img = document.createElement('img');
       img.src = ph.data;
       img.alt = ph.name;
-      modalGallery.appendChild(img);
+      wrap.appendChild(img);
+      const comment = document.createElement('p');
+      comment.className = 'modal-comment';
+      comment.textContent = ph.comment || '';
+      wrap.appendChild(comment);
+      modalGallery.appendChild(wrap);
     });
   }
   modal.classList.add('active');
