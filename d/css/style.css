@@ -31,6 +31,23 @@ body {
   width: 100%;
 }
 
+.search-button {
+  display: block;
+  margin: 0 auto 1rem;
+  padding: 0.7rem 1.2rem;
+  max-width: 200px;
+  text-align: center;
+  background-color: var(--primary-color);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: var(--secondary-color);
+}
+
 /* Thin rotating awareness messages at the very top */
 .awareness-banner {
   background-color: #ffe08a;
@@ -441,6 +458,15 @@ button:hover {
   justify-content: center;
   gap: 20px;
   padding: 1rem;
+}
+
+#home-dogs-container {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+#home-dogs-container .card {
+  flex: 0 0 auto;
 }
 
 .card {
