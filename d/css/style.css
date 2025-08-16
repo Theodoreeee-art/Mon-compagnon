@@ -667,6 +667,20 @@ button:hover {
   font-size: 1.1rem;
 }
 
+.pet-extra-photos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.pet-extra-photos img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
 .pet-info h2 {
   text-align: center;
   color: var(--primary-color);
