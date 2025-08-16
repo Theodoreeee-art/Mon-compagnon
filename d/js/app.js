@@ -350,8 +350,9 @@ function initAlbum(user) {
     const tasks = files.map(file => new Promise(resolve => {
       const fr = new FileReader();
       fr.onload = () => {
-        const comment = prompt('Ajouter un commentaire pour cette photo :', '');
-        newPhotos.push({ name: file.name, data: fr.result, comment });
+        // Add the photo with an empty comment field. The textarea below the
+        // picture lets the user provide or edit a comment after import.
+        newPhotos.push({ name: file.name, data: fr.result, comment: '' });
         resolve();
       };
       fr.readAsDataURL(file);
