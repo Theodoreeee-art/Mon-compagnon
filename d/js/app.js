@@ -168,6 +168,12 @@ function savePetInfo(user) {
     if (errorEl) errorEl.textContent = 'Veuillez remplir tous les champs concernant votre chien.';
     return;
   }
+  const existingPhotos = (user.pet && user.pet.photos) ? user.pet.photos : [];
+  const totalPhotos = existingPhotos.length + (photoInput.files ? photoInput.files.length : 0);
+  if (totalPhotos < 2) {
+    if (errorEl) errorEl.textContent = 'Veuillez ajouter au moins deux photos de votre chien.';
+    return;
+  }
   // Read files asynchronously and then save
   const readerTasks = [];
   // Vet certificate (single file)
@@ -185,7 +191,7 @@ function savePetInfo(user) {
     readerTasks.push(vetPromise);
   }
   // Photos (multiple)
-  const photos = [];
+  const photos = existingPhotos.slice();
   if (photoInput.files && photoInput.files.length > 0) {
     Array.from(photoInput.files).forEach(file => {
       const p = new Promise((resolve) => {
