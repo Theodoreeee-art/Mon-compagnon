@@ -23,6 +23,15 @@ body {
   line-height: 1.6;
 }
 
+/* Thin rotating awareness messages at the very top */
+.awareness-banner {
+  background-color: #ffe08a;
+  color: #333;
+  text-align: center;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.85rem;
+}
+
 /* Top donation banner */
 .donation-banner {
   background-color: var(--secondary-color);

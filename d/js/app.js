@@ -447,6 +447,25 @@ function initGallerySlider() {
   }, 5000);
 }
 
+// Rotate awareness messages in the thin top banner
+function initAwarenessBanner() {
+  const el = document.getElementById('awareness-text');
+  if (!el) return;
+  const messages = [
+    "Stop au trafic d'animaux ! Signalez-le au 0 800 123 456.",
+    "Adoptez, n'achetez pas : soutenez les refuges.",
+    "Protégez la faune sauvage : gardez la nature propre.",
+    "Vaccinez et stérilisez vos animaux pour leur santé."
+  ];
+  let index = 0;
+  function update() {
+    el.textContent = messages[index];
+    index = (index + 1) % messages.length;
+  }
+  update();
+  setInterval(update, 6000);
+}
+
 // Attach event listeners based on page
 document.addEventListener('DOMContentLoaded', () => {
   const signupForm = document.getElementById('signup-form');
@@ -467,4 +486,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   // Home page slider
   initGallerySlider();
+  // Awareness messages banner
+  initAwarenessBanner();
 });
