@@ -114,6 +114,7 @@ function loadDashboard() {
   // Populate existing pet info if any
   if (user.pet) {
     displayPetInfo(user.pet);
+    initAlbum(user);
     const nameInput = document.getElementById('pet-name');
     const descInput = document.getElementById('pet-desc');
     const foodInput = document.getElementById('pet-food');
@@ -129,6 +130,8 @@ function loadDashboard() {
     if (infoSection) infoSection.style.display = 'none';
     const formEl = document.getElementById('pet-form');
     if (formEl) formEl.style.display = 'block';
+    const albumSection = document.getElementById('photo-album');
+    if (albumSection) albumSection.style.display = 'none';
   }
   // Attach form handler
   const petForm = document.getElementById('pet-form');
@@ -205,7 +208,9 @@ function savePetInfo(user) {
     };
     users[idx].pet = petObj;
     setUsers(users);
+    user.pet = petObj;
     displayPetInfo(petObj);
+    initAlbum(user);
   });
 }
 
@@ -279,17 +284,54 @@ function displayPetInfo(pet) {
   cardContent.appendChild(editBtn);
   card.appendChild(cardContent);
   infoEl.appendChild(card);
-  // Additional photos beyond the first
-  if (pet.photos && pet.photos.length > 1) {
-    const photosDiv = document.createElement('div');
-    photosDiv.className = 'pet-photos';
-    pet.photos.slice(1).forEach(ph => {
+}
+
+// Initialize and manage the photo album section on the dashboard
+function initAlbum(user) {
+  const section = document.getElementById('photo-album');
+  const input = document.getElementById('album-input');
+  if (!section || !input) return;
+  section.style.display = 'block';
+  displayAlbum(user.pet);
+  if (input.dataset.initialized) return;
+  input.dataset.initialized = 'true';
+  input.addEventListener('change', () => {
+    const files = Array.from(input.files);
+    if (files.length === 0) return;
+    const newPhotos = [];
+    const tasks = files.map(file => new Promise(resolve => {
+      const fr = new FileReader();
+      fr.onload = () => {
+        newPhotos.push({ name: file.name, data: fr.result });
+        resolve();
+      };
+      fr.readAsDataURL(file);
+    }));
+    Promise.all(tasks).then(() => {
+      const users = getUsers();
+      const idx = users.findIndex(u => u.email === user.email);
+      if (!users[idx].pet.photos) users[idx].pet.photos = [];
+      users[idx].pet.photos = users[idx].pet.photos.concat(newPhotos);
+      user.pet.photos = users[idx].pet.photos;
+      setUsers(users);
+      input.value = '';
+      displayAlbum(user.pet);
+      displayPetInfo(user.pet);
+    });
+  });
+}
+
+function displayAlbum(pet) {
+  const gallery = document.getElementById('album-gallery');
+  if (!gallery) return;
+  gallery.innerHTML = '';
+  if (pet.photos) {
+    pet.photos.forEach(ph => {
       const img = document.createElement('img');
       img.src = ph.data;
       img.alt = ph.name;
-      photosDiv.appendChild(img);
+      gallery.appendChild(img);
     });
-    infoEl.appendChild(photosDiv);
   }
 }
 
