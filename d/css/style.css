@@ -458,6 +458,59 @@ button:hover {
   font-size: 0.8rem;
 }
 
+#view-album {
+  display: none;
+  margin-left: 0.5rem;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  max-height: 90%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.modal-gallery img {
+  max-width: 300px;
+  max-height: 300px;
+  border-radius: 8px;
+}
+
+.modal-close {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
 /* Features section on the home page */
 .features-grid {
   display: flex;

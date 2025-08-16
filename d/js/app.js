@@ -320,6 +320,8 @@ function initAlbum(user) {
   const section = document.getElementById('photo-album');
   const input = document.getElementById('album-input');
   const addBtn = document.getElementById('add-photos');
+  const viewBtn = document.getElementById('view-album');
+  const closeBtn = document.getElementById('close-album');
   if (!section || !input) return;
   section.style.display = 'block';
   displayAlbum(user.pet);
@@ -327,6 +329,18 @@ function initAlbum(user) {
   input.dataset.initialized = 'true';
   if (addBtn) {
     addBtn.addEventListener('click', () => input.click());
+  }
+  if (viewBtn) {
+    viewBtn.addEventListener('click', () => openAlbumModal(user.pet));
+  }
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeAlbumModal);
+  }
+  const modal = document.getElementById('album-modal');
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeAlbumModal();
+    });
   }
   input.addEventListener('change', () => {
     const files = Array.from(input.files);
@@ -358,6 +372,14 @@ function displayAlbum(pet) {
   const gallery = document.getElementById('album-gallery');
   if (!gallery) return;
   gallery.innerHTML = '';
+  const viewBtn = document.getElementById('view-album');
+  if (viewBtn) {
+    if (pet.photos && pet.photos.length > 0) {
+      viewBtn.style.display = 'inline-block';
+    } else {
+      viewBtn.style.display = 'none';
+    }
+  }
   if (pet.photos) {
     pet.photos.forEach((ph, index) => {
       const wrap = document.createElement('div');
@@ -387,6 +409,29 @@ function displayAlbum(pet) {
       wrap.appendChild(ta);
       gallery.appendChild(wrap);
     });
+  }
+}
+
+function openAlbumModal(pet) {
+  const modal = document.getElementById('album-modal');
+  const modalGallery = document.getElementById('modal-gallery');
+  if (!modal || !modalGallery) return;
+  modalGallery.innerHTML = '';
+  if (pet.photos) {
+    pet.photos.forEach(ph => {
+      const img = document.createElement('img');
+      img.src = ph.data;
+      img.alt = ph.name;
+      modalGallery.appendChild(img);
+    });
+  }
+  modal.classList.add('active');
+}
+
+function closeAlbumModal() {
+  const modal = document.getElementById('album-modal');
+  if (modal) {
+    modal.classList.remove('active');
   }
 }
 
