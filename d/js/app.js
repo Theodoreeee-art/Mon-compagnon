@@ -319,11 +319,15 @@ function displayPetInfo(pet) {
 function initAlbum(user) {
   const section = document.getElementById('photo-album');
   const input = document.getElementById('album-input');
+  const downloadBtn = document.getElementById('download-photos');
   if (!section || !input) return;
   section.style.display = 'block';
   displayAlbum(user.pet);
   if (input.dataset.initialized) return;
   input.dataset.initialized = 'true';
+  if (downloadBtn) {
+    downloadBtn.addEventListener('click', () => downloadAllPhotos(user.pet));
+  }
   input.addEventListener('change', () => {
     const files = Array.from(input.files);
     if (files.length === 0) return;
@@ -364,7 +368,7 @@ function displayAlbum(pet) {
       img.style.cursor = 'pointer';
       const link = document.createElement('a');
       link.href = ph.data;
-      link.target = '_blank';
+      link.download = ph.name || `photo_${index + 1}`;
       link.appendChild(img);
       wrap.appendChild(link);
       const ta = document.createElement('textarea');
@@ -384,6 +388,23 @@ function displayAlbum(pet) {
       gallery.appendChild(wrap);
     });
   }
+}
+
+function downloadAllPhotos(pet) {
+  if (!pet.photos || pet.photos.length === 0) return;
+  const zip = new JSZip();
+  pet.photos.forEach((ph, index) => {
+    const base64 = ph.data.split(',')[1];
+    const name = ph.name || `photo_${index + 1}.png`;
+    zip.file(name, base64, { base64: true });
+  });
+  zip.generateAsync({ type: 'blob' }).then(content => {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(content);
+    link.download = 'photos_chien.zip';
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+  });
 }
 
 // Display all dogs for adoption on dogs.html
