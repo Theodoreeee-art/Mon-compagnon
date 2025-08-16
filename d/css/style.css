@@ -109,7 +109,7 @@ body {
   font-size: 0.85rem;
 }
 
-/* Donation banner positioned below the main header */
+/* Donation banner displayed near the page footer */
 .donation-banner {
   background-color: var(--secondary-color);
   color: #fff;
@@ -119,6 +119,7 @@ body {
   gap: 1rem;
   padding: 0.5rem 1rem;
   font-size: 0.95rem;
+  margin: 2rem 0;
 }
 
 .donation-banner .donate-button {
