@@ -492,6 +492,19 @@ function loadDogsPage() {
       fundSpan.textContent = 'Cagnotte: ' + (user.fund.toFixed(2)) + ' €';
       cardContent.appendChild(fundSpan);
       card.appendChild(cardContent);
+      // Display any additional photos beneath the main card
+      if (user.pet.photos && user.pet.photos.length > 1) {
+        const extraContainer = document.createElement('div');
+        extraContainer.className = 'pet-extra-photos';
+        user.pet.photos.slice(1).forEach(photo => {
+          const extraImg = document.createElement('img');
+          extraImg.src = photo.data;
+          extraImg.alt = user.pet.name;
+          extraImg.loading = 'lazy';
+          extraContainer.appendChild(extraImg);
+        });
+        card.appendChild(extraContainer);
+      }
       container.appendChild(card);
     }
   });
@@ -537,6 +550,19 @@ function loadHomeDogs() {
       fund.textContent = 'Cagnotte: ' + user.fund.toFixed(2) + ' €';
       content.append(h3, p, fund);
       card.appendChild(content);
+      // Display any additional photos below the card
+      if (user.pet.photos && user.pet.photos.length > 1) {
+        const extraContainer = document.createElement('div');
+        extraContainer.className = 'pet-extra-photos';
+        user.pet.photos.slice(1).forEach(photo => {
+          const extraImg = document.createElement('img');
+          extraImg.src = photo.data;
+          extraImg.alt = user.pet.name;
+          extraImg.loading = 'lazy';
+          extraContainer.appendChild(extraImg);
+        });
+        card.appendChild(extraContainer);
+      }
       container.appendChild(card);
     }
   });
