@@ -422,6 +422,57 @@ function loadDogsPage() {
   }
 }
 
+// Display preview of adoptable dogs on the home page with search
+function loadHomeDogs() {
+  const container = document.getElementById('home-dogs-container');
+  if (!container) return;
+  const searchInput = document.getElementById('search-dog-input');
+  const users = getUsers();
+
+  function render(filter = '') {
+    container.innerHTML = '';
+    let count = 0;
+    users.forEach(user => {
+      if (user.pet) {
+        const text = (user.pet.name + ' ' + user.pet.description).toLowerCase();
+        if (filter && !text.includes(filter)) return;
+        count++;
+        const card = document.createElement('div');
+        card.className = 'card';
+        const img = document.createElement('img');
+        if (user.pet.photos && user.pet.photos.length > 0) {
+          img.src = user.pet.photos[0].data;
+        } else {
+          img.src = 'images/real2.jpg';
+        }
+        img.alt = user.pet.name;
+        card.appendChild(img);
+        const content = document.createElement('div');
+        content.className = 'card-content';
+        const h3 = document.createElement('h3');
+        h3.textContent = user.pet.name;
+        const p = document.createElement('p');
+        p.textContent = user.pet.description;
+        const fund = document.createElement('p');
+        fund.className = 'fund';
+        fund.textContent = 'Cagnotte: ' + user.fund.toFixed(2) + ' €';
+        content.append(h3, p, fund);
+        card.appendChild(content);
+        container.appendChild(card);
+      }
+    });
+    const messageEl = document.getElementById('no-home-dogs-message');
+    if (messageEl) messageEl.style.display = count === 0 ? 'block' : 'none';
+  }
+
+  render();
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      render(searchInput.value.trim().toLowerCase());
+    });
+  }
+}
+
 // Simple slider for the home page gallery
 function initGallerySlider() {
   const slider = document.querySelector('.gallery-slider');
@@ -484,6 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('dogs-page')) {
     loadDogsPage();
   }
+  loadHomeDogs();
   // Home page slider
   initGallerySlider();
   // Awareness messages banner
