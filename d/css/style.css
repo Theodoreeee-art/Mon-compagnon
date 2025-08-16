@@ -207,6 +207,11 @@ button:hover {
 
 .pet-info {
   margin-top: 1rem;
+  display: none;
+}
+
+.pet-info button {
+  margin-top: 0.5rem;
 }
 
 .pet-photos {

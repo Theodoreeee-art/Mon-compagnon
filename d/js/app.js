@@ -124,6 +124,11 @@ function loadDashboard() {
     if (foodInput) foodInput.value = user.pet.food || '';
     if (toyInput) toyInput.value = user.pet.toy || '';
     if (behaviorInput) behaviorInput.value = user.pet.behavior || '';
+  } else {
+    const infoSection = document.getElementById('pet-info');
+    if (infoSection) infoSection.style.display = 'none';
+    const formEl = document.getElementById('pet-form');
+    if (formEl) formEl.style.display = 'block';
   }
   // Attach form handler
   const petForm = document.getElementById('pet-form');
@@ -201,15 +206,33 @@ function savePetInfo(user) {
     users[idx].pet = petObj;
     setUsers(users);
     displayPetInfo(petObj);
-    // reset form inputs
-    document.getElementById('pet-form').reset();
   });
+}
+
+// Show the pet form for editing existing data
+function showEditForm(pet) {
+  const form = document.getElementById('pet-form');
+  const infoEl = document.getElementById('pet-info');
+  if (infoEl) infoEl.style.display = 'none';
+  if (form) {
+    form.style.display = 'block';
+    if (pet) {
+      document.getElementById('pet-name').value = pet.name || '';
+      document.getElementById('pet-desc').value = pet.description || '';
+      document.getElementById('pet-food').value = pet.food || '';
+      document.getElementById('pet-toy').value = pet.toy || '';
+      document.getElementById('pet-behavior').value = pet.behavior || '';
+    }
+  }
 }
 
 // Display pet information on the dashboard
 function displayPetInfo(pet) {
   const infoEl = document.getElementById('pet-info');
   if (!infoEl) return;
+  const form = document.getElementById('pet-form');
+  if (form) form.style.display = 'none';
+  infoEl.style.display = 'block';
   // Clear existing
   infoEl.innerHTML = '';
   const card = document.createElement('div');
@@ -249,6 +272,11 @@ function displayPetInfo(pet) {
     vetLink.style.marginBottom = '0.5rem';
     cardContent.appendChild(vetLink);
   }
+  const editBtn = document.createElement('button');
+  editBtn.type = 'button';
+  editBtn.textContent = 'Modifier';
+  editBtn.addEventListener('click', () => showEditForm(pet));
+  cardContent.appendChild(editBtn);
   card.appendChild(cardContent);
   infoEl.appendChild(card);
   // Additional photos beyond the first
