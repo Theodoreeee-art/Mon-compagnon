@@ -340,6 +340,31 @@ function loadDogsPage() {
   }
 }
 
+// Simple slider for the home page gallery
+function initGallerySlider() {
+  const slider = document.querySelector('.gallery-slider');
+  if (!slider) return;
+  const track = slider.querySelector('.slider-track');
+  const slides = slider.querySelectorAll('.slide');
+  const prev = slider.querySelector('.slider-btn.prev');
+  const next = slider.querySelector('.slider-btn.next');
+  let index = 0;
+  function update() {
+    track.style.transform = `translateX(-${index * 100}%)`;
+  }
+  prev.addEventListener('click', () => {
+    index = (index - 1 + slides.length) % slides.length;
+    update();
+  });
+  next.addEventListener('click', () => {
+    index = (index + 1) % slides.length;
+    update();
+  });
+  setInterval(() => {
+    next.click();
+  }, 5000);
+}
+
 // Attach event listeners based on page
 document.addEventListener('DOMContentLoaded', () => {
   const signupForm = document.getElementById('signup-form');
@@ -358,4 +383,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('dogs-page')) {
     loadDogsPage();
   }
+  // Home page slider
+  initGallerySlider();
 });
