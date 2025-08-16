@@ -61,26 +61,41 @@ body {
 .donation-banner {
   background-color: var(--secondary-color);
   color: #fff;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
   padding: 0.5rem 1rem;
   font-size: 0.95rem;
 }
 
-.donation-banner a {
-  color: #fff;
+.donation-banner .donate-button {
+  background: #fff;
+  color: var(--primary-color);
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  text-decoration: none;
   font-weight: bold;
-  text-decoration: underline;
+  transition: background-color 0.3s ease;
+}
+
+.donation-banner .donate-button:hover {
+  background: #f1f1f1;
 }
 
 /* Header navigation */
 header {
-  background-color: var(--primary-color);
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   color: #fff;
-  padding: 0.8rem 1.5rem;
+  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 header h1 {
@@ -98,11 +113,17 @@ nav a {
   color: #fff;
   text-decoration: none;
   font-weight: bold;
-  transition: opacity 0.3s ease;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
 }
 
 nav a:hover {
-  opacity: 0.8;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+nav a.active {
+  background-color: rgba(255, 255, 255, 0.25);
 }
 
 /* Branding container groups the logo and the site name */
