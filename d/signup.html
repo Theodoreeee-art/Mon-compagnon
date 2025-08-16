@@ -10,7 +10,7 @@
   <header>
     <div class="branding">
       <img src="images/logo.png" alt="Logo Mon Compagnon" class="logo">
-      <span style="font-size:1.4rem;font-weight:bold;">Mon&nbsp;Compagnon</span>
+        <span class="brand-title">Mon&nbsp;Compagnon</span>
     </div>
     <nav>
       <a href="index.html">Accueil</a>
@@ -30,9 +30,9 @@
     <!-- we avoid using the native required attribute here so we can
          display custom validation messages in the application script -->
     <input type="password" id="signup-confirm">
-    <p id="signup-error" style="color:red;"></p>
+      <p id="signup-error" class="error-message"></p>
     <button type="submit">S'abonner</button>
-    <p style="text-align:center;margin-top:1rem;">Déjà inscrit&nbsp;? <a href="login.html">Se connecter</a></p>
+      <p class="form-note">Déjà inscrit&nbsp;? <a href="login.html">Se connecter</a></p>
   </form>
   <script src="js/app.js"></script>
 </body>

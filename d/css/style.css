@@ -23,6 +23,37 @@ body {
   line-height: 1.6;
 }
 
+/* Utility classes replacing former inline styles */
+.brand-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.error-message {
+  color: red;
+}
+
+.form-note {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.hidden-message {
+  text-align: center;
+  display: none;
+}
+
+.hidden-section {
+  display: none;
+}
+
+.footer {
+  text-align: center;
+  padding: 1rem 0;
+  background: var(--primary-color);
+  color: #fff;
+}
+
 .search-box {
   display: block;
   margin: 0 auto 1rem;
