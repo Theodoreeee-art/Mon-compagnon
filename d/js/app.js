@@ -318,11 +318,12 @@ function displayPetInfo(pet) {
   // Display additional photos below the card
   if (pet.photos && pet.photos.length > 1) {
     const extraContainer = document.createElement('div');
-    extraContainer.className = 'pet-extra-photos';
+    extraContainer.classList.add('pet-extra-photos');
     pet.photos.slice(1).forEach((photo) => {
       const extraImg = document.createElement('img');
       extraImg.src = photo.data;
       extraImg.alt = pet.name;
+      extraImg.loading = 'lazy';
       extraContainer.appendChild(extraImg);
     });
     infoEl.appendChild(extraContainer);
