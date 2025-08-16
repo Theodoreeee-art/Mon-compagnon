@@ -191,7 +191,7 @@ function savePetInfo(user) {
       const p = new Promise((resolve) => {
         const fr = new FileReader();
         fr.onload = function() {
-          photos.push({ name: file.name, data: fr.result });
+          photos.push({ name: file.name, data: fr.result, comment: '' });
           resolve();
         };
         fr.readAsDataURL(file);
@@ -325,7 +325,7 @@ function initAlbum(user) {
     const tasks = files.map(file => new Promise(resolve => {
       const fr = new FileReader();
       fr.onload = () => {
-        newPhotos.push({ name: file.name, data: fr.result });
+        newPhotos.push({ name: file.name, data: fr.result, comment: '' });
         resolve();
       };
       fr.readAsDataURL(file);
@@ -349,11 +349,28 @@ function displayAlbum(pet) {
   if (!gallery) return;
   gallery.innerHTML = '';
   if (pet.photos) {
-    pet.photos.forEach(ph => {
+    pet.photos.forEach((ph, index) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'album-item';
       const img = document.createElement('img');
       img.src = ph.data;
       img.alt = ph.name;
-      gallery.appendChild(img);
+      wrap.appendChild(img);
+      const ta = document.createElement('textarea');
+      ta.className = 'album-comment';
+      ta.placeholder = 'Ajouter un commentaire';
+      ta.value = ph.comment || '';
+      ta.addEventListener('change', () => {
+        const users = getUsers();
+        const email = getCurrentUserEmail();
+        const idx = users.findIndex(u => u.email === email);
+        if (idx !== -1 && users[idx].pet && users[idx].pet.photos && users[idx].pet.photos[index]) {
+          users[idx].pet.photos[index].comment = ta.value;
+          setUsers(users);
+        }
+      });
+      wrap.appendChild(ta);
+      gallery.appendChild(wrap);
     });
   }
 }
