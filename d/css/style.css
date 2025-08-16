@@ -23,6 +23,34 @@ body {
   line-height: 1.6;
 }
 
+/* Bandeau de sensibilisation défilant en haut de page */
+.awareness-banner {
+  background: #ffebcc;
+  color: var(--dark-text);
+  padding: 0.3rem 0;
+  overflow: hidden;
+  font-size: 0.9rem;
+}
+
+.awareness-track {
+  display: inline-block;
+  white-space: nowrap;
+  animation: awareness-scroll 25s linear infinite;
+}
+
+.awareness-track span {
+  margin-right: 2rem;
+}
+
+@keyframes awareness-scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
 /* Header navigation */
 header {
   background-color: var(--primary-color);
