@@ -32,7 +32,7 @@ body {
   font-size: 0.85rem;
 }
 
-/* Top donation banner */
+/* Donation banner positioned below the main header */
 .donation-banner {
   background-color: var(--secondary-color);
   color: #fff;
