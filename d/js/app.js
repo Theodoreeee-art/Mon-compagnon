@@ -385,6 +385,11 @@ function displayPetInfo(pet) {
       imgEl.src = photo.data;
       imgEl.alt = photo.name;
       fig.appendChild(imgEl);
+      if (photo.comment) {
+        const caption = document.createElement('figcaption');
+        caption.textContent = photo.comment;
+        fig.appendChild(caption);
+      }
       gallery.appendChild(fig);
     });
   }
@@ -410,7 +415,20 @@ function displayPetInfo(pet) {
         fr.onload = function() {
           const comment = prompt('Ajouter un commentaire pour cette photo :', '');
           if (!pet.photos) pet.photos = [];
-          pet.photos.push({ name: file.name, data: fr.result, comment });
+          const photoObj = { name: file.name, data: fr.result, comment };
+          pet.photos.push(photoObj);
+          // display immediately in the gallery
+          const fig = document.createElement('figure');
+          const imgEl = document.createElement('img');
+          imgEl.src = photoObj.data;
+          imgEl.alt = photoObj.name;
+          fig.appendChild(imgEl);
+          if (photoObj.comment) {
+            const cap = document.createElement('figcaption');
+            cap.textContent = photoObj.comment;
+            fig.appendChild(cap);
+          }
+          gallery.appendChild(fig);
           resolve();
         };
         fr.readAsDataURL(file);
