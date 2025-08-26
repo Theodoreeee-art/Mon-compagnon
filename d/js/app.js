@@ -459,6 +459,46 @@ function closeAlbumModal() {
   }
 }
 
+// Show detailed information about a dog in a modal
+function openDogModal(user) {
+  const modal = document.getElementById('dog-modal');
+  if (!modal) return;
+  const content = modal.querySelector('.modal-content');
+  const pet = user.pet;
+  content.innerHTML = `
+    <button class="modal-close" aria-label="Fermer">&times;</button>
+    <h2>${pet.name}</h2>
+    <p><strong>Race :</strong> ${pet.breed}</p>
+    <p><strong>Date de naissance :</strong> ${pet.dob}</p>
+    <p><strong>Description :</strong> ${pet.description}</p>
+    <p><strong>Nourriture préférée :</strong> ${pet.food}</p>
+    <p><strong>Jouet préféré :</strong> ${pet.toy}</p>
+    <p><strong>Comportement :</strong> ${pet.behavior}</p>
+    <p><strong>Cagnotte :</strong> ${user.fund.toFixed(2)} €</p>
+    <p><strong>Maître :</strong> ${user.email}</p>
+  `;
+  if (pet.photos && pet.photos.length > 0) {
+    const extra = document.createElement('div');
+    extra.className = 'pet-extra-photos';
+    pet.photos.forEach(photo => {
+      const img = document.createElement('img');
+      img.src = photo.data;
+      img.alt = pet.name;
+      extra.appendChild(img);
+    });
+    content.appendChild(extra);
+  }
+  modal.classList.add('open');
+  const closeBtn = content.querySelector('.modal-close');
+  closeBtn.addEventListener('click', () => modal.classList.remove('open'));
+  modal.addEventListener('click', function handler(e) {
+    if (e.target === modal) {
+      modal.classList.remove('open');
+      modal.removeEventListener('click', handler);
+    }
+  });
+}
+
 // Display all dogs for adoption on dogs.html
 function loadDogsPage() {
   const container = document.getElementById('dogs-container');
@@ -505,6 +545,8 @@ function loadDogsPage() {
         });
         card.appendChild(extraContainer);
       }
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', () => openDogModal(user));
       container.appendChild(card);
     }
   });
@@ -563,6 +605,8 @@ function loadHomeDogs() {
         });
         card.appendChild(extraContainer);
       }
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', () => openDogModal(user));
       container.appendChild(card);
     }
   });
