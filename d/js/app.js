@@ -374,12 +374,12 @@ function displayPetInfo(pet) {
   card.appendChild(cardContent);
   infoEl.appendChild(card);
   // Photo gallery below the card
+  const galleryTitle = document.createElement('h3');
+  galleryTitle.textContent = 'Galerie de photos';
+  infoEl.appendChild(galleryTitle);
+  const gallery = document.createElement('div');
+  gallery.className = 'photo-gallery';
   if (pet.photos && pet.photos.length > 0) {
-    const galleryTitle = document.createElement('h3');
-    galleryTitle.textContent = 'Galerie de photos';
-    infoEl.appendChild(galleryTitle);
-    const gallery = document.createElement('div');
-    gallery.className = 'photo-gallery';
     pet.photos.forEach(photo => {
       const fig = document.createElement('figure');
       const imgEl = document.createElement('img');
@@ -393,8 +393,49 @@ function displayPetInfo(pet) {
       }
       gallery.appendChild(fig);
     });
-    infoEl.appendChild(gallery);
   }
+  infoEl.appendChild(gallery);
+  // Allow uploading additional photos with comments
+  const addPhotoDiv = document.createElement('div');
+  addPhotoDiv.className = 'add-photo';
+  const addLabel = document.createElement('label');
+  addLabel.textContent = 'Ajouter des photos';
+  addLabel.htmlFor = 'additional-photos';
+  addPhotoDiv.appendChild(addLabel);
+  const addInput = document.createElement('input');
+  addInput.type = 'file';
+  addInput.id = 'additional-photos';
+  addInput.accept = 'image/*';
+  addInput.multiple = true;
+  addInput.addEventListener('change', () => {
+    if (!addInput.files || addInput.files.length === 0) return;
+    const tasks = [];
+    Array.from(addInput.files).forEach(file => {
+      const task = new Promise(resolve => {
+        const fr = new FileReader();
+        fr.onload = function() {
+          const comment = prompt('Ajouter un commentaire pour cette photo :', '');
+          if (!pet.photos) pet.photos = [];
+          pet.photos.push({ name: file.name, data: fr.result, comment });
+          resolve();
+        };
+        fr.readAsDataURL(file);
+      });
+      tasks.push(task);
+    });
+    Promise.all(tasks).then(() => {
+      const users = getUsers();
+      const email = getCurrentUserEmail();
+      const idx = users.findIndex(u => u.email === email);
+      if (idx !== -1) {
+        users[idx].pet.photos = pet.photos;
+        setUsers(users);
+        displayPetInfo(users[idx].pet);
+      }
+    });
+  });
+  addPhotoDiv.appendChild(addInput);
+  infoEl.appendChild(addPhotoDiv);
   // ensure the newly created sheet is visible
   window.scrollTo({ top: infoEl.offsetTop, behavior: 'smooth' });
 }
