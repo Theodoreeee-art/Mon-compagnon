@@ -218,8 +218,9 @@ function savePetInfo(user) {
   const photoInput = document.getElementById('pet-photos');
   const errorEl = document.getElementById('pet-error');
   if (errorEl) errorEl.textContent = '';
-  // Allow saving even if some fields are left empty or no photos are provided
-  const existingPhoto = (user.pet && user.pet.photos && user.pet.photos[0]) ? user.pet.photos[0] : null;
+  // Preserve existing photos if any
+  const existingPhotos = (user.pet && user.pet.photos) ? user.pet.photos : [];
+  const newPhotos = [...existingPhotos];
   // Read files asynchronously and then save
   const readerTasks = [];
   // Vet certificate (single file)
@@ -236,20 +237,20 @@ function savePetInfo(user) {
     });
     readerTasks.push(vetPromise);
   }
-  // Photo (single)
-  let photoObj = existingPhoto;
+  // Photos (multiple)
   if (photoInput.files && photoInput.files.length > 0) {
-    const file = photoInput.files[0];
-    const p = new Promise((resolve) => {
-      const fr = new FileReader();
-      fr.onload = function() {
-        const comment = prompt('Ajouter un commentaire pour cette photo :', '');
-        photoObj = { name: file.name, data: fr.result, comment };
-        resolve();
-      };
-      fr.readAsDataURL(file);
+    Array.from(photoInput.files).forEach(file => {
+      const p = new Promise((resolve) => {
+        const fr = new FileReader();
+        fr.onload = function() {
+          const comment = prompt('Ajouter un commentaire pour cette photo :', '');
+          newPhotos.push({ name: file.name, data: fr.result, comment });
+          resolve();
+        };
+        fr.readAsDataURL(file);
+      });
+      readerTasks.push(p);
     });
-    readerTasks.push(p);
   }
   Promise.all(readerTasks).then(() => {
     const users = getUsers();
@@ -265,13 +266,14 @@ function savePetInfo(user) {
       toy,
       behavior,
       vetFile: vetObj,
-      photos: photoObj ? [photoObj] : []
+      photos: newPhotos
     };
     users[idx].pet = petObj;
     setUsers(users);
     user.pet = petObj;
     notifySeekers(petObj);
     displayPetInfo(petObj);
+    if (photoInput) photoInput.value = '';
   });
 }
 
@@ -371,6 +373,28 @@ function displayPetInfo(pet) {
   cardContent.appendChild(editBtn);
   card.appendChild(cardContent);
   infoEl.appendChild(card);
+  // Photo gallery below the card
+  if (pet.photos && pet.photos.length > 0) {
+    const galleryTitle = document.createElement('h3');
+    galleryTitle.textContent = 'Galerie de photos';
+    infoEl.appendChild(galleryTitle);
+    const gallery = document.createElement('div');
+    gallery.className = 'photo-gallery';
+    pet.photos.forEach(photo => {
+      const fig = document.createElement('figure');
+      const imgEl = document.createElement('img');
+      imgEl.src = photo.data;
+      imgEl.alt = photo.name;
+      fig.appendChild(imgEl);
+      if (photo.comment) {
+        const cap = document.createElement('figcaption');
+        cap.textContent = photo.comment;
+        fig.appendChild(cap);
+      }
+      gallery.appendChild(fig);
+    });
+    infoEl.appendChild(gallery);
+  }
   // ensure the newly created sheet is visible
   window.scrollTo({ top: infoEl.offsetTop, behavior: 'smooth' });
 }

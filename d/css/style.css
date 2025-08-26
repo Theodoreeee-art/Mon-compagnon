@@ -657,3 +657,24 @@ button:hover {
   font-size: 1.5rem;
   cursor: pointer;
 }
+
+/* Gallery of additional pet photos on the dashboard */
+.photo-gallery {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.photo-gallery img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.photo-gallery figcaption {
+  text-align: center;
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+}
