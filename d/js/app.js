@@ -150,6 +150,7 @@ function loadDashboard() {
     const nameInput = document.getElementById('pet-name');
     const breedInput = document.getElementById('pet-breed');
     const dobInput = document.getElementById('pet-dob');
+    const ageInput = document.getElementById('pet-age');
     const descInput = document.getElementById('pet-desc');
     const foodInput = document.getElementById('pet-food');
     const toyInput = document.getElementById('pet-toy');
@@ -157,6 +158,7 @@ function loadDashboard() {
     if (nameInput) nameInput.value = user.pet.name || '';
     if (breedInput) breedInput.value = user.pet.breed || '';
     if (dobInput) dobInput.value = user.pet.dob || '';
+    if (ageInput) ageInput.value = user.pet.age || '';
     if (descInput) descInput.value = user.pet.description || '';
     if (foodInput) foodInput.value = user.pet.food || '';
     if (toyInput) toyInput.value = user.pet.toy || '';
@@ -191,7 +193,8 @@ function notifySeekers(pet) {
   const seekers = getSeekers();
   const matches = seekers.filter(s => {
     const breedMatch = !s.breed || pet.breed.toLowerCase().includes(s.breed);
-    const ageMatch = !s.age || calculateAge(pet.dob) <= s.age;
+    const petAge = pet.age != null ? pet.age : calculateAge(pet.dob);
+    const ageMatch = !s.age || petAge <= s.age;
     return breedMatch && ageMatch;
   });
   if (matches.length > 0) {
@@ -205,6 +208,8 @@ function savePetInfo(user) {
   const name = document.getElementById('pet-name').value.trim();
   const breed = document.getElementById('pet-breed').value.trim();
   const dob = document.getElementById('pet-dob').value;
+  const ageStr = document.getElementById('pet-age').value;
+  const age = ageStr ? parseInt(ageStr, 10) : null;
   const desc = document.getElementById('pet-desc').value.trim();
   const food = document.getElementById('pet-food').value.trim();
   const toy = document.getElementById('pet-toy').value.trim();
@@ -254,6 +259,7 @@ function savePetInfo(user) {
       name,
       breed,
       dob,
+      age,
       description: desc,
       food,
       toy,
@@ -280,6 +286,7 @@ function showEditForm(pet) {
       document.getElementById('pet-name').value = pet.name || '';
       document.getElementById('pet-breed').value = pet.breed || '';
       document.getElementById('pet-dob').value = pet.dob || '';
+      document.getElementById('pet-age').value = pet.age || '';
       document.getElementById('pet-desc').value = pet.description || '';
       document.getElementById('pet-food').value = pet.food || '';
       document.getElementById('pet-toy').value = pet.toy || '';
@@ -325,6 +332,16 @@ function displayPetInfo(pet) {
     dobP.textContent = 'Date de naissance :';
   }
   cardContent.appendChild(dobP);
+  const ageP = document.createElement('p');
+  if (pet.age != null) {
+    ageP.textContent = 'Âge : ' + pet.age + ' an' + (pet.age > 1 ? 's' : '');
+  } else if (pet.dob) {
+    const years = Math.floor(calculateAge(pet.dob));
+    ageP.textContent = 'Âge : ' + years + ' an' + (years > 1 ? 's' : '');
+  } else {
+    ageP.textContent = 'Âge :';
+  }
+  cardContent.appendChild(ageP);
   const descP = document.createElement('p');
   descP.textContent = pet.description;
   cardContent.appendChild(descP);
@@ -364,11 +381,19 @@ function openDogModal(user) {
   if (!modal) return;
   const content = modal.querySelector('.modal-content');
   const pet = user.pet;
+  let ageDisplay = '';
+  if (pet.age != null) {
+    ageDisplay = pet.age + ' an' + (pet.age > 1 ? 's' : '');
+  } else if (pet.dob) {
+    const years = Math.floor(calculateAge(pet.dob));
+    ageDisplay = years + ' an' + (years > 1 ? 's' : '');
+  }
   content.innerHTML = `
     <button class="modal-close" aria-label="Fermer">&times;</button>
     <h2>${pet.name}</h2>
     <p><strong>Race :</strong> ${pet.breed}</p>
     <p><strong>Date de naissance :</strong> ${pet.dob}</p>
+    <p><strong>Âge :</strong> ${ageDisplay}</p>
     <p><strong>Description :</strong> ${pet.description}</p>
     <p><strong>Nourriture préférée :</strong> ${pet.food}</p>
     <p><strong>Jouet préféré :</strong> ${pet.toy}</p>
