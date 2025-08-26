@@ -43,13 +43,6 @@ body {
   display: none;
 }
 
-.hidden-section {
-  display: none;
-}
-
-.hidden-input {
-  display: none;
-}
 
 .footer {
   text-align: center;
@@ -413,62 +406,6 @@ button:hover {
   margin-top: 0.5rem;
 }
 
-.pet-photos {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 1rem;
-}
-
-.pet-photos img {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Album photo gallery */
-.album-gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 1rem;
-}
-
-.album-gallery img {
-  max-width: 200px;
-  max-height: 200px;
-  width: auto;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-}
-
-.album-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  background: #fff;
-  padding: 0.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 200px; /* ensure consistent width so items align side by side */
-}
-
-.album-comment {
-  width: 200px;
-  margin-top: 0;
-  font-size: 0.8rem;
-  text-align: center;
-}
-
-#view-album {
-  display: none;
-  margin-left: 0.5rem;
-}
 
 .modal {
   position: fixed;
@@ -497,35 +434,7 @@ button:hover {
   flex-direction: column;
 }
 
-.modal-gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-}
-
-.modal-gallery img {
-  max-width: 300px;
-  max-height: 300px;
-  border-radius: 8px;
-}
-
-.modal-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  background: #fff;
-  padding: 0.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.modal-comment {
-  max-width: 300px;
-  font-size: 0.9rem;
-  text-align: center;
-}
+/* removed album and modal gallery styles for single photo requirement */
 
 .modal-close {
   align-self: flex-end;
@@ -665,21 +574,6 @@ button:hover {
 .pet-card .card-content {
   padding: 2rem;
   font-size: 1.1rem;
-}
-
-.pet-extra-photos {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-  gap: 0.5rem;
-  justify-items: center;
-  margin-top: 1rem;
-}
-
-.pet-extra-photos img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 4px;
 }
 
 .pet-info h2 {
