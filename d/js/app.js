@@ -164,16 +164,8 @@ function savePetInfo(user) {
   const photoInput = document.getElementById('pet-photos');
   const errorEl = document.getElementById('pet-error');
   if (errorEl) errorEl.textContent = '';
-  if (!name || !breed || !dob || !desc || !food || !toy || !behavior) {
-    if (errorEl) errorEl.textContent = 'Veuillez remplir tous les champs concernant votre chien.';
-    return;
-  }
+  // Allow saving even if some fields are left empty or no photos are provided
   const existingPhotos = (user.pet && user.pet.photos) ? user.pet.photos : [];
-  const totalPhotos = existingPhotos.length + (photoInput.files ? photoInput.files.length : 0);
-  if (totalPhotos < 2) {
-    if (errorEl) errorEl.textContent = 'Veuillez ajouter au moins deux photos de votre chien.';
-    return;
-  }
   // Read files asynchronously and then save
   const readerTasks = [];
   // Vet certificate (single file)
