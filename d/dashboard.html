@@ -40,8 +40,8 @@
         <textarea id="pet-behavior" placeholder="Décrivez les habitudes et le tempérament" required></textarea>
         <label for="pet-vet">Certificat vétérinaire de santé</label>
         <input type="file" id="pet-vet" accept="application/pdf,image/*">
-        <label for="pet-photos">Photos du chien (au moins deux)</label>
-        <input type="file" id="pet-photos" accept="image/*" multiple>
+        <label for="pet-photos">Photo du chien</label>
+        <input type="file" id="pet-photos" accept="image/*">
           <p id="pet-error" class="error-message"></p>
         <button type="submit">Enregistrer les informations</button>
       </form>
@@ -49,19 +49,6 @@
     <section class="pet-info" id="pet-info">
       <!-- Pet info preview will be inserted here -->
     </section>
-      <section id="photo-album" class="hidden-section">
-      <h3>Album photo de votre chien</h3>
-      <input type="file" id="album-input" accept="image/*" multiple class="hidden-input">
-      <button type="button" id="add-photos">Importer des photos</button>
-      <button type="button" id="view-album">Voir l'album</button>
-      <div id="album-gallery" class="album-gallery"></div>
-    </section>
-    <div id="album-modal" class="modal">
-      <div class="modal-content">
-        <button type="button" id="close-album" class="modal-close">&times;</button>
-        <div id="modal-gallery" class="modal-gallery"></div>
-      </div>
-    </div>
   </div>
   <script src="js/app.js"></script>
 </body>

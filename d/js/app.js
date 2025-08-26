@@ -114,7 +114,6 @@ function loadDashboard() {
   // Populate existing pet info if any
   if (user.pet) {
     displayPetInfo(user.pet);
-    initAlbum(user);
     const nameInput = document.getElementById('pet-name');
     const breedInput = document.getElementById('pet-breed');
     const dobInput = document.getElementById('pet-dob');
@@ -134,8 +133,6 @@ function loadDashboard() {
     if (infoSection) infoSection.style.display = 'none';
     const formEl = document.getElementById('pet-form');
     if (formEl) formEl.style.display = 'block';
-    const albumSection = document.getElementById('photo-album');
-    if (albumSection) albumSection.style.display = 'none';
   }
   // Attach form handler
   const petForm = document.getElementById('pet-form');
@@ -165,7 +162,7 @@ function savePetInfo(user) {
   const errorEl = document.getElementById('pet-error');
   if (errorEl) errorEl.textContent = '';
   // Allow saving even if some fields are left empty or no photos are provided
-  const existingPhotos = (user.pet && user.pet.photos) ? user.pet.photos : [];
+  const existingPhoto = (user.pet && user.pet.photos && user.pet.photos[0]) ? user.pet.photos[0] : null;
   // Read files asynchronously and then save
   const readerTasks = [];
   // Vet certificate (single file)
@@ -182,21 +179,20 @@ function savePetInfo(user) {
     });
     readerTasks.push(vetPromise);
   }
-  // Photos (multiple)
-  const photos = existingPhotos.slice();
+  // Photo (single)
+  let photoObj = existingPhoto;
   if (photoInput.files && photoInput.files.length > 0) {
-    Array.from(photoInput.files).forEach(file => {
-      const p = new Promise((resolve) => {
-        const fr = new FileReader();
-        fr.onload = function() {
-          const comment = prompt('Ajouter un commentaire pour cette photo :', '');
-          photos.push({ name: file.name, data: fr.result, comment });
-          resolve();
-        };
-        fr.readAsDataURL(file);
-      });
-      readerTasks.push(p);
+    const file = photoInput.files[0];
+    const p = new Promise((resolve) => {
+      const fr = new FileReader();
+      fr.onload = function() {
+        const comment = prompt('Ajouter un commentaire pour cette photo :', '');
+        photoObj = { name: file.name, data: fr.result, comment };
+        resolve();
+      };
+      fr.readAsDataURL(file);
     });
+    readerTasks.push(p);
   }
   Promise.all(readerTasks).then(() => {
     const users = getUsers();
@@ -211,13 +207,12 @@ function savePetInfo(user) {
       toy,
       behavior,
       vetFile: vetObj,
-      photos
+      photos: photoObj ? [photoObj] : []
     };
     users[idx].pet = petObj;
     setUsers(users);
     user.pet = petObj;
     displayPetInfo(petObj);
-    initAlbum(user);
   });
 }
 
@@ -307,148 +302,6 @@ function displayPetInfo(pet) {
   card.appendChild(cardContent);
   infoEl.appendChild(card);
 
-  // Display additional photos below the card
-  if (pet.photos && pet.photos.length > 1) {
-    const extraContainer = document.createElement('div');
-    extraContainer.classList.add('pet-extra-photos');
-    pet.photos.slice(1).forEach((photo) => {
-      const extraImg = document.createElement('img');
-      extraImg.src = photo.data;
-      extraImg.alt = pet.name;
-      extraImg.loading = 'lazy';
-      extraContainer.appendChild(extraImg);
-    });
-    infoEl.appendChild(extraContainer);
-  }
-}
-
-// Initialize and manage the photo album section on the dashboard
-function initAlbum(user) {
-  const section = document.getElementById('photo-album');
-  const input = document.getElementById('album-input');
-  const addBtn = document.getElementById('add-photos');
-  const viewBtn = document.getElementById('view-album');
-  const closeBtn = document.getElementById('close-album');
-  if (!section || !input) return;
-  section.style.display = 'block';
-  displayAlbum(user.pet);
-  if (input.dataset.initialized) return;
-  input.dataset.initialized = 'true';
-  if (addBtn) {
-    addBtn.addEventListener('click', () => input.click());
-  }
-  if (viewBtn) {
-    viewBtn.addEventListener('click', () => openAlbumModal(user.pet));
-  }
-  if (closeBtn) {
-    closeBtn.addEventListener('click', closeAlbumModal);
-  }
-  const modal = document.getElementById('album-modal');
-  if (modal) {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) closeAlbumModal();
-    });
-  }
-  input.addEventListener('change', () => {
-    const files = Array.from(input.files);
-    if (files.length === 0) return;
-    const newPhotos = [];
-    const tasks = files.map(file => new Promise(resolve => {
-      const fr = new FileReader();
-      fr.onload = () => {
-        // Add the photo with an empty comment field. The textarea below the
-        // picture lets the user provide or edit a comment after import.
-        newPhotos.push({ name: file.name, data: fr.result, comment: '' });
-        resolve();
-      };
-      fr.readAsDataURL(file);
-    }));
-    Promise.all(tasks).then(() => {
-      const users = getUsers();
-      const idx = users.findIndex(u => u.email === user.email);
-      if (!users[idx].pet.photos) users[idx].pet.photos = [];
-      users[idx].pet.photos = users[idx].pet.photos.concat(newPhotos);
-      user.pet.photos = users[idx].pet.photos;
-      setUsers(users);
-      input.value = '';
-      displayAlbum(user.pet);
-      displayPetInfo(user.pet);
-    });
-  });
-}
-
-function displayAlbum(pet) {
-  const gallery = document.getElementById('album-gallery');
-  if (!gallery) return;
-  gallery.innerHTML = '';
-  const viewBtn = document.getElementById('view-album');
-  if (viewBtn) {
-    if (pet.photos && pet.photos.length > 0) {
-      viewBtn.style.display = 'inline-block';
-    } else {
-      viewBtn.style.display = 'none';
-    }
-  }
-  if (pet.photos) {
-    pet.photos.forEach((ph, index) => {
-      const wrap = document.createElement('div');
-      wrap.className = 'album-item';
-      const img = document.createElement('img');
-      img.src = ph.data;
-      img.alt = ph.name;
-      img.style.cursor = 'pointer';
-      const link = document.createElement('a');
-      link.href = ph.data;
-      link.target = '_blank';
-      link.appendChild(img);
-      wrap.appendChild(link);
-      const ta = document.createElement('textarea');
-      ta.className = 'album-comment';
-      ta.placeholder = 'Ajouter un commentaire';
-      ta.value = ph.comment || '';
-      ta.addEventListener('change', () => {
-        const users = getUsers();
-        const email = getCurrentUserEmail();
-        const idx = users.findIndex(u => u.email === email);
-        if (idx !== -1 && users[idx].pet && users[idx].pet.photos && users[idx].pet.photos[index]) {
-          users[idx].pet.photos[index].comment = ta.value;
-          setUsers(users);
-        }
-      });
-      wrap.appendChild(ta);
-      gallery.appendChild(wrap);
-    });
-  }
-}
-
-function openAlbumModal(pet) {
-  const modal = document.getElementById('album-modal');
-  const modalGallery = document.getElementById('modal-gallery');
-  if (!modal || !modalGallery) return;
-  modalGallery.innerHTML = '';
-  if (pet.photos) {
-    pet.photos.forEach(ph => {
-      const wrap = document.createElement('div');
-      wrap.className = 'modal-item';
-      const img = document.createElement('img');
-      img.src = ph.data;
-      img.alt = ph.name;
-      wrap.appendChild(img);
-      const comment = document.createElement('p');
-      comment.className = 'modal-comment';
-      comment.textContent = ph.comment || '';
-      wrap.appendChild(comment);
-      modalGallery.appendChild(wrap);
-    });
-  }
-  modal.classList.add('active');
-}
-
-function closeAlbumModal() {
-  const modal = document.getElementById('album-modal');
-  if (modal) {
-    modal.classList.remove('active');
-  }
 }
 
 // Show detailed information about a dog in a modal
@@ -470,15 +323,10 @@ function openDogModal(user) {
     <p><strong>Maître :</strong> ${user.email}</p>
   `;
   if (pet.photos && pet.photos.length > 0) {
-    const extra = document.createElement('div');
-    extra.className = 'pet-extra-photos';
-    pet.photos.forEach(photo => {
-      const img = document.createElement('img');
-      img.src = photo.data;
-      img.alt = pet.name;
-      extra.appendChild(img);
-    });
-    content.appendChild(extra);
+    const img = document.createElement('img');
+    img.src = pet.photos[0].data;
+    img.alt = pet.name;
+    content.appendChild(img);
   }
   modal.classList.add('open');
   const closeBtn = content.querySelector('.modal-close');
@@ -524,19 +372,6 @@ function loadDogsPage() {
       fundSpan.textContent = 'Cagnotte: ' + (user.fund.toFixed(2)) + ' €';
       cardContent.appendChild(fundSpan);
       card.appendChild(cardContent);
-      // Display any additional photos beneath the main card
-      if (user.pet.photos && user.pet.photos.length > 1) {
-        const extraContainer = document.createElement('div');
-        extraContainer.className = 'pet-extra-photos';
-        user.pet.photos.slice(1).forEach(photo => {
-          const extraImg = document.createElement('img');
-          extraImg.src = photo.data;
-          extraImg.alt = user.pet.name;
-          extraImg.loading = 'lazy';
-          extraContainer.appendChild(extraImg);
-        });
-        card.appendChild(extraContainer);
-      }
       card.style.cursor = 'pointer';
       card.addEventListener('click', () => openDogModal(user));
       container.appendChild(card);
@@ -584,19 +419,6 @@ function loadHomeDogs() {
       fund.textContent = 'Cagnotte: ' + user.fund.toFixed(2) + ' €';
       content.append(h3, p, fund);
       card.appendChild(content);
-      // Display any additional photos below the card
-      if (user.pet.photos && user.pet.photos.length > 1) {
-        const extraContainer = document.createElement('div');
-        extraContainer.className = 'pet-extra-photos';
-        user.pet.photos.slice(1).forEach(photo => {
-          const extraImg = document.createElement('img');
-          extraImg.src = photo.data;
-          extraImg.alt = user.pet.name;
-          extraImg.loading = 'lazy';
-          extraContainer.appendChild(extraImg);
-        });
-        card.appendChild(extraContainer);
-      }
       card.style.cursor = 'pointer';
       card.addEventListener('click', () => openDogModal(user));
       container.appendChild(card);
