@@ -218,6 +218,10 @@ function savePetInfo(user) {
   const photoInput = document.getElementById('pet-photos');
   const errorEl = document.getElementById('pet-error');
   if (errorEl) errorEl.textContent = '';
+  if (!name || !desc) {
+    if (errorEl) errorEl.textContent = 'Veuillez renseigner au moins le nom et la description.';
+    return;
+  }
   // Preserve existing photos if any
   const existingPhotos = (user.pet && user.pet.photos) ? user.pet.photos : [];
   const newPhotos = [...existingPhotos];
@@ -255,6 +259,10 @@ function savePetInfo(user) {
     const users = getUsers();
     // Update this user
     const idx = users.findIndex(u => u.email === user.email);
+    if (idx === -1) {
+      if (errorEl) errorEl.textContent = "Utilisateur introuvable. Veuillez vous reconnecter.";
+      return;
+    }
     const petObj = {
       name,
       breed,
