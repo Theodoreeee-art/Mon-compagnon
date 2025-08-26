@@ -601,6 +601,70 @@ button:hover {
   color: var(--primary-color);
 }
 
+/* Two-column grid for dog cards and modal */
+.dog-card,
+.dog-modal-grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+.dog-photo {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.dog-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dog-name {
+  margin: 0;
+  font-size: 1.4rem;
+  color: var(--primary-color);
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.fund-badge {
+  background: var(--secondary-color);
+  color: #fff;
+}
+
+.dog-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-button {
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.action-button:hover {
+  background-color: var(--secondary-color);
+}
+
+.spacing-md {
+  margin-top: 1rem;
+}
+
 /* Responsive adjustments for small screens */
 @media (max-width: 600px) {
   .card,
@@ -616,6 +680,15 @@ button:hover {
   .features-grid {
     flex-direction: column;
     align-items: center;
+  }
+
+  .dog-card,
+  .dog-modal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dog-photo {
+    height: 200px;
   }
 }
 
