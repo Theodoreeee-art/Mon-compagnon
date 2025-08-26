@@ -412,25 +412,30 @@ function openDogModal(user) {
     const years = Math.floor(calculateAge(pet.dob));
     ageDisplay = years + ' an' + (years > 1 ? 's' : '');
   }
+  const photoSrc =
+    pet.photos && pet.photos.length > 0 ? pet.photos[0].data : 'images/real2.jpg';
   content.innerHTML = `
     <button class="modal-close" aria-label="Fermer">&times;</button>
-    <h2>${pet.name}</h2>
-    <p><strong>Race :</strong> ${pet.breed}</p>
-    <p><strong>Date de naissance :</strong> ${pet.dob}</p>
-    <p><strong>Âge :</strong> ${ageDisplay}</p>
-    <p><strong>Description :</strong> ${pet.description}</p>
-    <p><strong>Nourriture préférée :</strong> ${pet.food}</p>
-    <p><strong>Jouet préféré :</strong> ${pet.toy}</p>
-    <p><strong>Comportement :</strong> ${pet.behavior}</p>
-    <p><strong>Cagnotte :</strong> ${user.fund.toFixed(2)} €</p>
-    <p><strong>Maître :</strong> ${user.email}</p>
+    <div class="dog-modal-grid">
+      <img src="${photoSrc}" alt="${pet.name}" class="dog-photo">
+      <div class="dog-info">
+        <h2 class="dog-name">${pet.name}</h2>
+        <p class="dog-breed"><strong>Race :</strong> ${pet.breed}</p>
+        <p><strong>Date de naissance :</strong> ${pet.dob}</p>
+        <p><strong>Âge :</strong> ${ageDisplay}</p>
+        <p class="dog-desc"><strong>Description :</strong> ${pet.description}</p>
+        <p><strong>Nourriture préférée :</strong> ${pet.food}</p>
+        <p><strong>Jouet préféré :</strong> ${pet.toy}</p>
+        <p><strong>Comportement :</strong> ${pet.behavior}</p>
+        <span class="badge fund-badge">Cagnotte : ${user.fund.toFixed(2)} €</span>
+        <p><strong>Maître :</strong> ${user.email}</p>
+        <div class="dog-actions spacing-md">
+          <button class="action-button adopt-btn">Adopter</button>
+          <button class="action-button share-btn">Partager</button>
+        </div>
+      </div>
+    </div>
   `;
-  if (pet.photos && pet.photos.length > 0) {
-    const img = document.createElement('img');
-    img.src = pet.photos[0].data;
-    img.alt = pet.name;
-    content.appendChild(img);
-  }
   modal.classList.add('open');
   const closeBtn = content.querySelector('.modal-close');
   closeBtn.addEventListener('click', () => modal.classList.remove('open'));
@@ -452,29 +457,19 @@ function loadDogsPage() {
     if (user.pet) {
       count++;
       const card = document.createElement('div');
-      card.className = 'card';
-      // use first photo or placeholder
-      const img = document.createElement('img');
-      if (user.pet.photos && user.pet.photos.length > 0) {
-        img.src = user.pet.photos[0].data;
-      } else {
-        img.src = 'images/real2.jpg'; // fallback image: photo réelle d’un chien
-      }
-      img.alt = user.pet.name;
-      card.appendChild(img);
-      const cardContent = document.createElement('div');
-      cardContent.className = 'card-content';
-      const h3 = document.createElement('h3');
-      h3.textContent = user.pet.name;
-      cardContent.appendChild(h3);
-      const p = document.createElement('p');
-      p.textContent = user.pet.description;
-      cardContent.appendChild(p);
-      const fundSpan = document.createElement('p');
-      fundSpan.className = 'fund';
-      fundSpan.textContent = 'Cagnotte: ' + (user.fund.toFixed(2)) + ' €';
-      cardContent.appendChild(fundSpan);
-      card.appendChild(cardContent);
+      card.className = 'card dog-card';
+      const photoSrc =
+        user.pet.photos && user.pet.photos.length > 0
+          ? user.pet.photos[0].data
+          : 'images/real2.jpg';
+      card.innerHTML = `
+        <img src="${photoSrc}" alt="${user.pet.name}" class="dog-photo">
+        <div class="dog-info">
+          <h3 class="dog-name">${user.pet.name}</h3>
+          <p class="dog-desc">${user.pet.description}</p>
+          <span class="badge fund-badge">${user.fund.toFixed(2)} €</span>
+        </div>
+      `;
       card.style.cursor = 'pointer';
       card.addEventListener('click', () => openDogModal(user));
       container.appendChild(card);
