@@ -528,6 +528,7 @@ button:hover {
 #home-dogs-container {
   flex-wrap: nowrap;
   overflow-x: auto;
+  justify-content: flex-start;
 }
 
 #home-dogs-container .card {
