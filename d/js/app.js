@@ -37,6 +37,20 @@ function findUser(email) {
   return users.find(u => u.email === email);
 }
 
+function getSeekers() {
+  const data = localStorage.getItem('seekers');
+  try {
+    return data ? JSON.parse(data) : [];
+  } catch (e) {
+    console.error('Error parsing seekers from localStorage', e);
+    return [];
+  }
+}
+
+function setSeekers(seekers) {
+  localStorage.setItem('seekers', JSON.stringify(seekers));
+}
+
 // Sign up logic: create new user
 function handleSignup(event) {
   event.preventDefault();
@@ -85,6 +99,25 @@ function handleLogin(event) {
   }
   setCurrentUserEmail(email);
   window.location.href = 'dashboard.html';
+}
+
+function handleSeekerForm(event) {
+  event.preventDefault();
+  const email = document.getElementById('seeker-email').value.trim().toLowerCase();
+  const breed = document.getElementById('seeker-breed').value.trim().toLowerCase();
+  const ageStr = document.getElementById('seeker-age').value.trim();
+  const errorEl = document.getElementById('seeker-error');
+  if (errorEl) errorEl.textContent = '';
+  if (!email) {
+    if (errorEl) errorEl.textContent = 'Veuillez fournir un e‑mail.';
+    return;
+  }
+  const age = ageStr ? parseInt(ageStr, 10) : null;
+  const seekers = getSeekers();
+  seekers.push({ email, breed, age });
+  setSeekers(seekers);
+  event.target.reset();
+  alert('Nous vous contacterons si un chien correspond à votre recherche.');
 }
 
 // Logout
@@ -145,6 +178,25 @@ function loadDashboard() {
   const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', logout);
+  }
+}
+
+function calculateAge(dob) {
+  if (!dob) return Infinity;
+  const diff = Date.now() - new Date(dob).getTime();
+  return diff / (1000 * 60 * 60 * 24 * 365.25);
+}
+
+function notifySeekers(pet) {
+  const seekers = getSeekers();
+  const matches = seekers.filter(s => {
+    const breedMatch = !s.breed || pet.breed.toLowerCase().includes(s.breed);
+    const ageMatch = !s.age || calculateAge(pet.dob) <= s.age;
+    return breedMatch && ageMatch;
+  });
+  if (matches.length > 0) {
+    const emails = matches.map(m => m.email).join(', ');
+    alert('Ce chien correspond aux recherches de : ' + emails);
   }
 }
 
@@ -212,6 +264,7 @@ function savePetInfo(user) {
     users[idx].pet = petObj;
     setUsers(users);
     user.pet = petObj;
+    notifySeekers(petObj);
     displayPetInfo(petObj);
   });
 }
@@ -482,6 +535,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('login-form');
   if (loginForm) {
     loginForm.addEventListener('submit', handleLogin);
+  }
+  const seekerForm = document.getElementById('seeker-form');
+  if (seekerForm) {
+    seekerForm.addEventListener('submit', handleSeekerForm);
   }
   // Dashboard page detection
   if (document.getElementById('dashboard-page')) {
