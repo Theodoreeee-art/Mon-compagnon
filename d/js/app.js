@@ -243,8 +243,7 @@ function savePetInfo(user) {
       const p = new Promise((resolve) => {
         const fr = new FileReader();
         fr.onload = function() {
-          const comment = prompt('Ajouter un commentaire pour cette photo :', '');
-          newPhotos.push({ name: file.name, data: fr.result, comment });
+          newPhotos.push({ name: file.name, data: fr.result });
           resolve();
         };
         fr.readAsDataURL(file);
@@ -386,11 +385,6 @@ function displayPetInfo(pet) {
       imgEl.src = photo.data;
       imgEl.alt = photo.name;
       fig.appendChild(imgEl);
-      if (photo.comment) {
-        const cap = document.createElement('figcaption');
-        cap.textContent = photo.comment;
-        fig.appendChild(cap);
-      }
       gallery.appendChild(fig);
     });
     infoEl.appendChild(gallery);
