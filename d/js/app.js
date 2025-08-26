@@ -241,7 +241,7 @@ function displayPetInfo(pet) {
   if (!infoEl) return;
   const form = document.getElementById('pet-form');
   if (form) form.style.display = 'none';
-  infoEl.style.display = 'block';
+  infoEl.style.display = 'flex';
   // Clear existing
   infoEl.innerHTML = '';
   const title = document.createElement('h2');
@@ -301,7 +301,8 @@ function displayPetInfo(pet) {
   cardContent.appendChild(editBtn);
   card.appendChild(cardContent);
   infoEl.appendChild(card);
-
+  // ensure the newly created sheet is visible
+  window.scrollTo({ top: infoEl.offsetTop, behavior: 'smooth' });
 }
 
 // Show detailed information about a dog in a modal
