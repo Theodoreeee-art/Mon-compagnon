@@ -740,15 +740,26 @@ button:hover {
   gap: 0.5rem;
 }
 
+.photo-gallery figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .photo-gallery img {
-  width: 120px;
-  height: 120px;
+  width: 200px;
+  height: 200px;
   object-fit: cover;
   border-radius: 4px;
 }
 
 .photo-gallery figcaption {
-  text-align: center;
+  width: 100%;
+}
+
+.photo-gallery figcaption textarea {
+  width: 100%;
+  box-sizing: border-box;
   font-size: 0.8rem;
   margin-top: 0.2rem;
 }
