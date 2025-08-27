@@ -167,7 +167,11 @@ function loadDashboard() {
     const infoSection = document.getElementById('pet-info');
     if (infoSection) infoSection.style.display = 'none';
     const formEl = document.getElementById('pet-form');
-    if (formEl) formEl.style.display = 'block';
+    if (formEl) {
+      formEl.style.display = 'block';
+      const formSection = formEl.closest('section');
+      if (formSection) formSection.style.display = 'block';
+    }
   }
   // Attach form handler
   const petForm = document.getElementById('pet-form');
@@ -291,6 +295,8 @@ function showEditForm(pet) {
   if (infoEl) infoEl.style.display = 'none';
   if (form) {
     form.style.display = 'block';
+    const formSection = form.closest('section');
+    if (formSection) formSection.style.display = 'block';
     if (pet) {
       document.getElementById('pet-name').value = pet.name || '';
       document.getElementById('pet-breed').value = pet.breed || '';
@@ -309,7 +315,11 @@ function displayPetInfo(pet) {
   const infoEl = document.getElementById('pet-info');
   if (!infoEl) return;
   const form = document.getElementById('pet-form');
-  if (form) form.style.display = 'none';
+  if (form) {
+    form.style.display = 'none';
+    const formSection = form.closest('section');
+    if (formSection) formSection.style.display = 'none';
+  }
   infoEl.style.display = 'flex';
   // Clear existing
   infoEl.innerHTML = '';
