@@ -77,11 +77,9 @@ body {
 
 .section-header {
   display: flex;
-  flex-direction: column;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  flex-wrap: wrap;
   gap: 1rem;
   margin-bottom: 1rem;
 }
@@ -109,7 +107,6 @@ body {
   background-color: var(--secondary-color);
   color: #fff;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 1rem;
@@ -138,10 +135,9 @@ header {
   color: #fff;
   padding: 1rem 2rem;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  flex-wrap: wrap;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
@@ -157,7 +153,6 @@ nav {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
-  justify-content: center;
 }
 
 nav a {
@@ -180,13 +175,16 @@ nav a.active {
 /* Branding container groups the logo and the site name */
 .branding {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  margin-right: 1rem;
 }
+
 /* Logo image inside the header */
 .logo {
   height: 70px;
   width: 70px;
-  margin: 0;
+  margin-right: 0.5rem;
   border-radius: 50%;
   object-fit: cover;
   display: block;
@@ -230,7 +228,6 @@ nav a.active {
 /* Gallery of success stories */
 .gallery {
   display: flex;
-  flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
@@ -256,14 +253,12 @@ nav a.active {
 
 .slider-track {
   display: flex;
-  flex-direction: column;
   transition: transform 0.5s ease;
 }
 
 .slide {
   flex: 0 0 100%;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   gap: 20px;
   padding: 2rem 1rem;
@@ -431,7 +426,6 @@ button:hover {
 
 .modal.active {
   display: flex;
-  flex-direction: column;
 }
 
 .modal-content {
@@ -441,7 +435,6 @@ button:hover {
   max-height: 90%;
   overflow-y: auto;
   display: flex;
-  flex-direction: column;
   flex-direction: column;
 }
 
@@ -458,7 +451,6 @@ button:hover {
 /* Features section on the home page */
 .features-grid {
   display: flex;
-  flex-direction: column;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
@@ -527,7 +519,6 @@ button:hover {
 /* Cards for listing dogs */
 .cards-container {
   display: flex;
-  flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
@@ -553,7 +544,6 @@ button:hover {
   overflow: hidden;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction: column;
   flex-direction: column;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -631,7 +621,6 @@ button:hover {
 .dog-info {
   display: flex;
   flex-direction: column;
-  flex-direction: column;
   gap: 0.5rem;
 }
 
@@ -656,7 +645,6 @@ button:hover {
 
 .dog-actions {
   display: flex;
-  flex-direction: column;
   gap: 0.5rem;
 }
 
@@ -721,7 +709,6 @@ button:hover {
 
 .modal.open {
   display: flex;
-  flex-direction: column;
 }
 
 .modal-content {
@@ -749,7 +736,6 @@ button:hover {
 .photo-gallery {
   margin-top: 1rem;
   display: flex;
-  flex-direction: column;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
