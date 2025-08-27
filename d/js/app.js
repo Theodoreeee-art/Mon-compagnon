@@ -380,6 +380,33 @@ function displayPetInfo(pet) {
   cardContent.appendChild(editBtn);
   card.appendChild(cardContent);
   infoEl.appendChild(card);
+  const persistPhotos = () => {
+    const users = getUsers();
+    const email = getCurrentUserEmail();
+    const idx = users.findIndex(u => u.email === email);
+    if (idx !== -1) {
+      users[idx].pet.photos = pet.photos;
+      setUsers(users);
+    }
+  };
+  const createFigure = (photo) => {
+    const fig = document.createElement('figure');
+    const imgEl = document.createElement('img');
+    imgEl.src = photo.data;
+    imgEl.alt = photo.name;
+    fig.appendChild(imgEl);
+    const caption = document.createElement('figcaption');
+    const textarea = document.createElement('textarea');
+    textarea.placeholder = 'Ajouter un commentaire';
+    textarea.value = photo.comment || '';
+    textarea.addEventListener('input', () => {
+      photo.comment = textarea.value;
+      persistPhotos();
+    });
+    caption.appendChild(textarea);
+    fig.appendChild(caption);
+    return fig;
+  };
   // Photo gallery below the card
   const galleryTitle = document.createElement('h3');
   galleryTitle.textContent = 'Galerie de photos';
@@ -388,21 +415,11 @@ function displayPetInfo(pet) {
   gallery.className = 'photo-gallery';
   if (pet.photos && pet.photos.length > 0) {
     pet.photos.forEach(photo => {
-      const fig = document.createElement('figure');
-      const imgEl = document.createElement('img');
-      imgEl.src = photo.data;
-      imgEl.alt = photo.name;
-      fig.appendChild(imgEl);
-      if (photo.comment) {
-        const caption = document.createElement('figcaption');
-        caption.textContent = photo.comment;
-        fig.appendChild(caption);
-      }
-      gallery.appendChild(fig);
+      gallery.appendChild(createFigure(photo));
     });
   }
   infoEl.appendChild(gallery);
-  // Allow uploading additional photos with comments
+  // Allow uploading additional photos with editable comments
   const addPhotoDiv = document.createElement('div');
   addPhotoDiv.className = 'add-photo';
   const addLabel = document.createElement('label');
@@ -421,22 +438,11 @@ function displayPetInfo(pet) {
       const task = new Promise(resolve => {
         const fr = new FileReader();
         fr.onload = function() {
-          const comment = prompt('Ajouter un commentaire pour cette photo :', '');
           if (!pet.photos) pet.photos = [];
-          const photoObj = { name: file.name, data: fr.result, comment };
+          const photoObj = { name: file.name, data: fr.result, comment: '' };
           pet.photos.push(photoObj);
           // display immediately in the gallery
-          const fig = document.createElement('figure');
-          const imgEl = document.createElement('img');
-          imgEl.src = photoObj.data;
-          imgEl.alt = photoObj.name;
-          fig.appendChild(imgEl);
-          if (photoObj.comment) {
-            const cap = document.createElement('figcaption');
-            cap.textContent = photoObj.comment;
-            fig.appendChild(cap);
-          }
-          gallery.appendChild(fig);
+          gallery.appendChild(createFigure(photoObj));
           resolve();
         };
         fr.readAsDataURL(file);
@@ -444,14 +450,8 @@ function displayPetInfo(pet) {
       tasks.push(task);
     });
     Promise.all(tasks).then(() => {
-      const users = getUsers();
-      const email = getCurrentUserEmail();
-      const idx = users.findIndex(u => u.email === email);
-      if (idx !== -1) {
-        users[idx].pet.photos = pet.photos;
-        setUsers(users);
-        displayPetInfo(users[idx].pet);
-      }
+      persistPhotos();
+      displayPetInfo(pet);
     });
   });
   addPhotoDiv.appendChild(addInput);
